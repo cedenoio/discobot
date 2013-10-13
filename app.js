@@ -25,10 +25,21 @@ http.createServer(function (request, response){
   		var url = request.url;
 
   		//could use require('querystring'), though passing second argument as true is the same
-  		var request = require('url').parse(url, true);
-  		var dedicator = request.query.dedicator;
-  		var song = request.query.song;
-  		var light = request.query.light;
+  		var Request = require('url').parse(url, true);
+      var Mopidy = require("mopidy").Mopidy;
+  		
+      //grab shit form api
+      var dedicator = Request.query.dedicator;
+  		var song = Request.query.song;
+  		var light = Request.query.light;
+
+      //create instance of mopidy
+      var mopidy = new Mopidy({
+          //pass the URL to the WebSocket end point
+          webSocketUrl: "ws://localhost:6680/mopidy/ws/"
+      });
+      //log all possible events
+      mopidy.on(console.log.bind(console));
   	}
 
   response.end('Page Success');
